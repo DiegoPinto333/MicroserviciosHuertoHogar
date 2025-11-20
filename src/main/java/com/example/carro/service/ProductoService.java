@@ -37,6 +37,26 @@ public class ProductoService {
         return convertToResponseDTO(nuevoProducto);
     }
  
+    public ProductoResponseDTO update(int id, ProductoRequestDTO productoDTO) {
+        Producto producto = productoRepository.findById(id).orElse(null);
+        if (producto == null) {
+            return null; // O lanzar una excepción
+        }
+        producto.setNombre(productoDTO.getNombre());
+        producto.setPrecio(productoDTO.getPrecio());
+        producto.setStock(productoDTO.getStock());
+        Producto productoActualizado = productoRepository.save(producto);
+        return convertToResponseDTO(productoActualizado);
+    }
+
+    public boolean delete(int id) {
+        if (!productoRepository.existsById(id)) {
+            return false;
+        }
+        productoRepository.deleteById(id);
+        return true;
+    }
+
     // --- Métodos de conversión (mapeo) ---
  
     private ProductoResponseDTO convertToResponseDTO(Producto producto) {

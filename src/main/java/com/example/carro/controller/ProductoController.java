@@ -36,4 +36,19 @@ public class ProductoController {
         ProductoResponseDTO nuevoProducto = productoService.save(productoDTO);
         return new ResponseEntity<>(nuevoProducto, HttpStatus.CREATED);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductoResponseDTO> actualizarProducto(@PathVariable int id, @RequestBody ProductoRequestDTO productoDTO) {
+        ProductoResponseDTO productoActualizado = productoService.update(id, productoDTO);
+        if (productoActualizado == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(productoActualizado);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarProducto(@PathVariable int id) {
+        boolean eliminado = productoService.delete(id);
+        return eliminado ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
 }
